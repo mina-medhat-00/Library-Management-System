@@ -14,7 +14,12 @@ export const getAllBorrowers = async (req, res, next) => {
       limit,
       offset: (page - 1) * limit,
     });
-    res.status(200).send({ status: "success", data: borrowers });
+    res.status(200).send({
+      status: "success",
+      message: "Borrowers retrieved successfully",
+      data: borrowers,
+      pagination: { page, limit, total: borrowers.count },
+    });
   } catch (error) {
     next(error);
   }
@@ -28,7 +33,11 @@ export const getBorrowerById = async (req, res, next) => {
         .status(404)
         .send({ status: "fail", data: "Borrower not found" });
     }
-    res.status(200).send({ status: "success", data: borrower });
+    res.status(200).send({
+      status: "success",
+      message: "Borrower retrieved successfully",
+      data: borrower,
+    });
   } catch (error) {
     next(error);
   }
@@ -40,7 +49,11 @@ export const createBorrower = async (req, res, next) => {
       name: req.body.name,
       email: req.body.email,
     });
-    res.status(201).send({ status: "success", data: borrower });
+    res.status(201).send({
+      status: "success",
+      message: "Borrower created successfully",
+      data: borrower,
+    });
   } catch (error) {
     next(error);
   }
@@ -52,10 +65,14 @@ export const updateBorrower = async (req, res, next) => {
     if (!borrower) {
       return res
         .status(404)
-        .send({ status: "fail", data: "Borrower not found" });
+        .send({ status: "fail", message: "Borrower not found", data: null });
     }
     await borrower.update(req.body);
-    res.status(200).send({ status: "success", data: borrower });
+    res.status(200).send({
+      status: "success",
+      message: "Borrower updated successfully",
+      data: borrower,
+    });
   } catch (error) {
     next(error);
   }
@@ -67,10 +84,12 @@ export const deleteBorrower = async (req, res, next) => {
     if (!borrower) {
       return res
         .status(404)
-        .send({ status: "fail", data: "Borrower not found" });
+        .send({ status: "fail", message: "Borrower not found", data: null });
     }
     await borrower.destroy();
-    res.status(200).send({ status: "success", data: "Borrower deleted" });
+    res
+      .status(200)
+      .send({ status: "success", message: "Borrower deleted", data: borrower });
   } catch (error) {
     next(error);
   }

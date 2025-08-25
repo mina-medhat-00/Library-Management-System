@@ -8,13 +8,13 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
-app.use(errorHandler);
 // API routes
 app.use("/api/v1/borrowers", borrowerRouter);
 // fallback route for unknown routes
 app.use("*", (req, res) => {
   res.status(404).send({ status: "fail", message: "Route not found" });
 });
+app.use(errorHandler);
 
 sequelize
   .authenticate()

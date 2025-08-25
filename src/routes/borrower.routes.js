@@ -1,4 +1,9 @@
 import express from "express";
+import validate from "../middleware/validator.js";
+import {
+  createBorrowerSchema,
+  updateBorrowerSchema,
+} from "../validator/borrower.validator.js";
 import {
   createBorrower,
   getAllBorrowers,
@@ -11,8 +16,8 @@ const router = express.Router();
 
 router.get("/", getAllBorrowers);
 router.get("/:id", getBorrowerById);
-router.post("/", createBorrower);
-router.put("/:id", updateBorrower);
+router.post("/", validate(createBorrowerSchema), createBorrower);
+router.put("/:id", validate(updateBorrowerSchema), updateBorrower);
 router.delete("/:id", deleteBorrower);
 
 export default router;
