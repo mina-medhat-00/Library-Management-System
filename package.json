@@ -1,0 +1,21 @@
+{
+  "name": "library-management-system",
+  "version": "1.0.0",
+  "description": "simple library management system to manage books and borrowers",
+  "license": "ISC",
+  "author": "mina-medhat",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.3",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
