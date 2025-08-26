@@ -4,6 +4,7 @@ import sequelize from "./config/db.config.js";
 import errorHandler from "./middleware/error.handler.js";
 import bookRouter from "./routes/book.routes.js";
 import borrowerRouter from "./routes/borrower.routes.js";
+import borrowingRouter from "./routes/borrowing.routes.js";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -13,9 +14,12 @@ app.use(express.json());
 // API routes
 app.use("/api/v1/books", bookRouter);
 app.use("/api/v1/borrowers", borrowerRouter);
+app.use("/api/v1/borrowings", borrowingRouter);
 // fallback route for unknown routes
 app.use("*", (req, res) => {
-  res.status(404).send({ status: "fail", message: "Route not found" });
+  res
+    .status(404)
+    .send({ status: "fail", message: "Route not found", date: null });
 });
 
 app.use(errorHandler);

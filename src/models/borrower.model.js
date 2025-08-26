@@ -19,8 +19,8 @@ const Borrower = sequelize.define(
   },
   {
     tableName: "borrowers",
+    paranoid: true,
     timestamps: true,
-    underscored: true,
     indexes: [{ unique: true, fields: ["email"] }],
   }
 );

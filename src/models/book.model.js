@@ -16,19 +16,19 @@ const Book = sequelize.define(
       allowNull: false,
       unique: true,
     },
-    available_quantity: {
+    availableQuantity: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
     },
-    shelf_location: {
+    shelfLocation: {
       type: DataTypes.STRING,
     },
   },
   {
     tableName: "books",
+    paranoid: true,
     timestamps: true,
-    underscored: true,
     indexes: [{ unique: true, fields: ["isbn"] }],
   }
 );
