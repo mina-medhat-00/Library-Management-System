@@ -3,7 +3,7 @@ import validate from "../middleware/validator.js";
 import {
   createBorrowerSchema,
   updateBorrowerSchema,
-} from "../validator/borrower.validator.js";
+} from "../validators/borrower.validator.js";
 import {
   createBorrower,
   getAllBorrowers,

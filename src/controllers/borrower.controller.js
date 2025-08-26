@@ -1,4 +1,5 @@
 import Borrower from "../models/borrower.model.js";
+import AppError from "../utils/app.error.js";
 
 export const getAllBorrowers = async (req, res, next) => {
   // pagination handles negative and non-numeric values
@@ -14,7 +15,7 @@ export const getAllBorrowers = async (req, res, next) => {
       limit,
       offset: (page - 1) * limit,
     });
-    res.status(200).send({
+    res.status(200).json({
       status: "success",
       message: "Borrowers retrieved successfully",
       data: borrowers,
@@ -29,11 +30,9 @@ export const getBorrowerById = async (req, res, next) => {
   try {
     const borrower = await Borrower.findByPk(req.params.id);
     if (!borrower) {
-      return res
-        .status(404)
-        .send({ status: "fail", data: "Borrower not found" });
+      return next(new AppError("Borrower not found", 404));
     }
-    res.status(200).send({
+    res.status(200).json({
       status: "success",
       message: "Borrower retrieved successfully",
       data: borrower,
@@ -44,12 +43,10 @@ export const getBorrowerById = async (req, res, next) => {
 };
 
 export const createBorrower = async (req, res, next) => {
+  const { name, email } = req.body;
   try {
-    const borrower = await Borrower.create({
-      name: req.body.name,
-      email: req.body.email,
-    });
-    res.status(201).send({
+    const borrower = await Borrower.create({ name, email });
+    res.status(201).json({
       status: "success",
       message: "Borrower created successfully",
       data: borrower,
@@ -63,12 +60,10 @@ export const updateBorrower = async (req, res, next) => {
   try {
     const borrower = await Borrower.findByPk(req.params.id);
     if (!borrower) {
-      return res
-        .status(404)
-        .send({ status: "fail", message: "Borrower not found", data: null });
+      return next(new AppError("Borrower not found", 404));
     }
     await borrower.update(req.body);
-    res.status(200).send({
+    res.status(200).json({
       status: "success",
       message: "Borrower updated successfully",
       data: borrower,
@@ -82,14 +77,12 @@ export const deleteBorrower = async (req, res, next) => {
   try {
     const borrower = await Borrower.findByPk(req.params.id);
     if (!borrower) {
-      return res
-        .status(404)
-        .send({ status: "fail", message: "Borrower not found", data: null });
+      return next(new AppError("Borrower not found", 404));
     }
     await borrower.destroy();
     res
       .status(200)
-      .send({ status: "success", message: "Borrower deleted", data: borrower });
+      .json({ status: "success", message: "Borrower deleted", data: borrower });
   } catch (error) {
     next(error);
   }
