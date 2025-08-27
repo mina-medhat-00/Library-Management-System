@@ -1,7 +1,8 @@
 import express from "express";
 import hpp from "hpp";
 import "dotenv/config";
-import { swaggerUi, swaggerSpec } from "./config/swagger.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 import sequelize from "./config/db.js";
 import errorHandler from "./middleware/error.handler.js";
 import bookRouter from "./routes/book.routes.js";
