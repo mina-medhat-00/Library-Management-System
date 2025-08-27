@@ -5,9 +5,10 @@ import {
   updateBookSchema,
 } from "../validators/book.validator.js";
 import {
-  createBook,
+  searchBooks,
   getAllBooks,
   getBookById,
+  createBook,
   updateBook,
   deleteBook,
 } from "../controllers/book.controller.js";
@@ -15,6 +16,7 @@ import limiter from "../utils/limiter.js";
 
 const router = express.Router();
 
+router.get("/search", searchBooks);
 router.get("/", getAllBooks);
 router.get("/:id", getBookById);
 router.post("/", limiter, validate(createBookSchema), createBook);

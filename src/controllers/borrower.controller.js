@@ -26,8 +26,14 @@ export const getAllBorrowers = async (req, res, next) => {
 };
 
 export const getBorrowerById = async (req, res, next) => {
+  const id = Number(req.params.id);
+
   try {
-    const borrower = await Borrower.findByPk(req.params.id);
+    if (isNaN(id)) {
+      return next(new AppError("ID must be a number", 400));
+    }
+
+    const borrower = await Borrower.findByPk(id);
     if (!borrower) {
       return next(new AppError("Borrower not found", 404));
     }
@@ -56,8 +62,14 @@ export const createBorrower = async (req, res, next) => {
 };
 
 export const updateBorrower = async (req, res, next) => {
+  const id = Number(req.params.id);
+
   try {
-    const borrower = await Borrower.findByPk(req.params.id);
+    if (isNaN(id)) {
+      return next(new AppError("ID must be a number", 400));
+    }
+
+    const borrower = await Borrower.findByPk(id);
     if (!borrower) {
       return next(new AppError("Borrower not found", 404));
     }

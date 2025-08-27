@@ -39,3 +39,29 @@ sequelize
   .catch((error) => {
     console.error("Database connection error:", error);
   });
+
+const gracefulShutdown = () => {
+  server.close((err) => {
+    if (err) {
+      console.error("Error closing HTTP server:", err);
+      return process.exit(1);
+    }
+    console.log("HTTP server closed.");
+  });
+
+  // set fallback timeout forcing connection termination
+  setTimeout(() => {
+    console.error("Time limit exceeded, forcing shutdown!");
+    process.exit(1);
+  }, 10000);
+};
+
+process.on("uncaughtException", (error) => {
+  console.log("Uncaught Exception Occurred", error.stack || error);
+  gracefulShutdown();
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("Unhandled Rejection", reason, promise);
+  gracefulShutdown();
+});
