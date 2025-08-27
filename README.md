@@ -20,7 +20,7 @@ Built with **Node.js, Express, Sequelize ORM, and Swagger** for API documentatio
 
 ## Tech Stack
 
-- **Backend**: Node.js, Express
+- **Backend**: Node.js v22.11, Express  v4.21
 - **Database**: Sequelize ORM, Sequelize CLI
 - **Validation**: Joi
 - **Docs**: Swagger UI
