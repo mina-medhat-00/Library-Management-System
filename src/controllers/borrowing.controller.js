@@ -1,8 +1,16 @@
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { Op } from "sequelize";
+import { createObjectCsvStringifier } from "csv-writer";
 import AppError from "../utils/app.error.js";
 import Borrowing from "../models/borrowing.model.js";
 import Book from "../models/book.model.js";
 import Borrower from "../models/borrower.model.js";
+
+// required for csv reports
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const borrowBook = async (req, res, next) => {
   const { bookId, borrowerId, dueDate } = req.body;
@@ -135,6 +143,63 @@ export const getOverdueBooks = async (_, res, next) => {
       status: "success",
       message: "Overdue books retrieved",
       data: overdueBooks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const exportBorrowingsReport = async (req, res, next) => {
+  try {
+    const { start, end } = req.query;
+
+    const borrowings = await Borrowing.findAll({
+      where: {
+        borrowDate: {
+          [Op.between]: [new Date(start), new Date(end)],
+        },
+      },
+      include: [
+        { model: Book, attributes: ["title"] },
+        { model: Borrower, attributes: ["name", "email"] },
+      ],
+    });
+
+    const stringfier = createObjectCsvStringifier({
+      header: [
+        { id: "borrower", title: "Borrower" },
+        { id: "email", title: "Email" },
+        { id: "book", title: "Book" },
+        { id: "borrowedAt", title: "Borrowed At" },
+        { id: "returnedAt", title: "Returned At" },
+      ],
+    });
+
+    const records = borrowings.map((record) => ({
+      borrower: record.Borrower.name,
+      email: record.Borrower.email,
+      book: record.Book.title,
+      borrowedAt: record.borrowedAt,
+      returnedAt: record.returnedAt,
+    }));
+
+    const csv =
+      stringfier.getHeaderString() + stringfier.stringifyRecords(records);
+
+    const exportDir = path.join(__dirname, "../../reports");
+    if (!fs.existsSync(exportDir)) {
+      fs.mkdirSync(exportDir);
+    }
+
+    const filename = `borrowings-${Date.now()}.csv`;
+    const filepath = path.join(exportDir, filename);
+
+    fs.writeFileSync(filepath, csv);
+
+    res.status(200).json({
+      status: "success",
+      message: "Report exported successfully",
+      data: filepath,
     });
   } catch (error) {
     next(error);

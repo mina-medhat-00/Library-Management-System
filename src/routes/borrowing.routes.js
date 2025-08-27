@@ -7,6 +7,7 @@ import {
 import {
   borrowBook,
   getBorrowerBooks,
+  exportBorrowingsReport,
   getOverdueBooks,
   returnBook,
 } from "../controllers/borrowing.controller.js";
@@ -17,5 +18,6 @@ router.post("/", validate(borrowBookSchema), borrowBook);
 router.patch("/", validate(returnBookSchema), returnBook);
 router.get("/borrowed/:id", getBorrowerBooks);
 router.get("/overdue", getOverdueBooks);
+router.get("/report", exportBorrowingsReport);
 
 export default router;
