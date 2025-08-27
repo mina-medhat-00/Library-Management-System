@@ -1,6 +1,6 @@
 import express from "express";
 import "dotenv/config";
-import sequelize from "./config/db.config.js";
+import sequelize from "./config/db.js";
 import errorHandler from "./middleware/error.handler.js";
 import bookRouter from "./routes/book.routes.js";
 import borrowerRouter from "./routes/borrower.routes.js";

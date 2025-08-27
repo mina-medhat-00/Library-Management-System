@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/db.config.js";
+import sequelize from "../config/db.js";
 import Book from "./book.model.js";
 import Borrower from "./borrower.model.js";
 

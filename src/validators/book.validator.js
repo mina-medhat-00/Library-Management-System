@@ -5,7 +5,7 @@ export const createBookSchema = Joi.object({
   author: Joi.string().min(3).max(100).required(),
   isbn: Joi.string().length(13).required(),
   availableQuantity: Joi.number().integer().min(0).required(),
-  shelfLocation: Joi.string(),
+  shelfLocation: Joi.string().max(5),
 });
 
 export const updateBookSchema = Joi.object({
@@ -13,5 +13,5 @@ export const updateBookSchema = Joi.object({
   author: Joi.string().min(3).max(100),
   isbn: Joi.string().length(13),
   availableQuantity: Joi.number().integer().min(0),
-  shelfLocation: Joi.string(),
+  shelfLocation: Joi.string().max(5),
 });

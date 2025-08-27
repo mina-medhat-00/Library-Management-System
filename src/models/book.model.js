@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/db.config.js";
+import sequelize from "../config/db.js";
 
 const Book = sequelize.define(
   "Book",
@@ -22,7 +22,7 @@ const Book = sequelize.define(
       defaultValue: 0,
     },
     shelfLocation: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(5),
     },
   },
   {
