@@ -1,6 +1,20 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
+/**
+ * Represents a Book in the library management system.
+ *
+ * @model
+ * @typedef {Object} Book
+ * @property {string} title - The title of the book. (Required)
+ * @property {string} author - The author of the book.
+ * @property {string} isbn - The unique ISBN-13 identifier for the book. (Required)
+ * @property {number} availableQuantity - The number of available copies of the book. (Required, defaults to 0)
+ * @property {string} shelfLocation - The shelf location code for the book.
+ *
+ * @description
+ * Sequelize model for the 'books' table, supporting soft deletes and timestamps.
+ */
 const Book = sequelize.define(
   "Book",
   {

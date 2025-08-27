@@ -12,6 +12,39 @@ import Borrower from "../models/borrower.model.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/**
+ * @swagger
+ * /api/v1/borrowings/borrow:
+ *   post:
+ *     summary: Borrow a book
+ *     description: Allows a borrower to check out a book if available.
+ *     tags:
+ *       - Borrowings
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               bookId:
+ *                 type: integer
+ *                 example: 1
+ *               borrowerId:
+ *                 type: integer
+ *                 example: 2
+ *               dueDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 2025-09-10
+ *     responses:
+ *       201:
+ *         description: Book successfully borrowed
+ *       404:
+ *         description: Book or Borrower not found
+ *       409:
+ *         description: Book not available
+ */
 export const borrowBook = async (req, res, next) => {
   const { bookId, borrowerId, dueDate } = req.body;
 
@@ -51,6 +84,35 @@ export const borrowBook = async (req, res, next) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/v1/borrowings/return:
+ *   post:
+ *     summary: Return a borrowed book
+ *     description: Updates the borrowing record and marks the book as returned or overdue if past due date.
+ *     tags:
+ *       - Borrowings
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               bookId:
+ *                 type: integer
+ *                 example: 1
+ *               borrowerId:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Book successfully returned or marked as overdue
+ *       404:
+ *         description: Book or borrowing record not found
+ *       500:
+ *         description: Internal server error
+ */
 export const returnBook = async (req, res, next) => {
   const { bookId, borrowerId } = req.body;
 
@@ -82,6 +144,58 @@ export const returnBook = async (req, res, next) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/v1/borrowings/borrower/{id}:
+ *   get:
+ *     summary: Get borrowed books for a borrower
+ *     description: Retrieve all currently borrowed books for a specific borrower.
+ *     tags:
+ *       - Borrowings
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the borrower
+ *         schema:
+ *           type: integer
+ *           example: 3
+ *     responses:
+ *       200:
+ *         description: List of borrowed books retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Borrowed books retrieved
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       title:
+ *                         type: string
+ *                         example: "The Great Gatsby"
+ *                       author:
+ *                         type: string
+ *                         example: "F. Scott Fitzgerald"
+ *                       isbn:
+ *                         type: string
+ *                         example: "9780743273565"
+ *                       shelfLocation:
+ *                         type: string
+ *                         example: "A2-5"
+ *       404:
+ *         description: Borrower not found
+ *       500:
+ *         description: Internal server error
+ */
 export const getBorrowerBooks = async (req, res, next) => {
   try {
     const borrowedBooks = await Borrowing.findAll({
@@ -112,6 +226,68 @@ export const getBorrowerBooks = async (req, res, next) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/v1/borrowings/overdue:
+ *   get:
+ *     summary: Get overdue books
+ *     description: Retrieve all books that are overdue or still borrowed beyond their due date.
+ *     tags:
+ *       - Borrowings
+ *     responses:
+ *       200:
+ *         description: Overdue books retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Overdue books retrieved
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       Book:
+ *                         type: object
+ *                         properties:
+ *                           title:
+ *                             type: string
+ *                             example: "The Great Gatsby"
+ *                           author:
+ *                             type: string
+ *                             example: "F. Scott Fitzgerald"
+ *                           isbn:
+ *                             type: string
+ *                             example: "9780743273565"
+ *                           shelfLocation:
+ *                             type: string
+ *                             example: "A2-5"
+ *                       Borrower:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                             example: "John Doe"
+ *                           email:
+ *                             type: string
+ *                             example: "johndoe@example.com"
+ *                       dueDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-08-15T00:00:00.000Z"
+ *                       status:
+ *                         type: string
+ *                         enum: [borrowed, overdue]
+ *                         example: overdue
+ *       500:
+ *         description: Internal server error
+ */
 export const getOverdueBooks = async (_, res, next) => {
   try {
     const overdueBooks = await Borrowing.findAll({
@@ -149,6 +325,53 @@ export const getOverdueBooks = async (_, res, next) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/v1/borrowings/report:
+ *   get:
+ *     summary: Export borrowings report
+ *     description: Generate and export a CSV report of all borrowings within a specified date range.
+ *     tags:
+ *       - Borrowings
+ *     parameters:
+ *       - in: query
+ *         name: start
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date (inclusive) for filtering borrowings (YYYY-MM-DD).
+ *         example: "2025-08-01"
+ *       - in: query
+ *         name: end
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date (inclusive) for filtering borrowings (YYYY-MM-DD).
+ *         example: "2025-08-27"
+ *     responses:
+ *       200:
+ *         description: Report exported successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Report exported successfully
+ *                 data:
+ *                   type: string
+ *                   example: reports/borrowings-1693159023456.csv
+ *       400:
+ *         description: Invalid or missing query parameters
+ *       500:
+ *         description: Internal server error
+ */
 export const exportBorrowingsReport = async (req, res, next) => {
   try {
     const { start, end } = req.query;

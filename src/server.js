@@ -1,6 +1,7 @@
 import express from "express";
 import hpp from "hpp";
 import "dotenv/config";
+import { swaggerUi, swaggerSpec } from "./config/swagger.js";
 import sequelize from "./config/db.js";
 import errorHandler from "./middleware/error.handler.js";
 import bookRouter from "./routes/book.routes.js";
@@ -19,6 +20,9 @@ app.use(hpp());
 app.use("/api/v1/books", bookRouter);
 app.use("/api/v1/borrowers", borrowerRouter);
 app.use("/api/v1/borrowings", borrowingRouter);
+
+// swagger route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // fallback route for unknown routes
 app.use("*", (req, res) => {
