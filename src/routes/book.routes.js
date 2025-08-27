@@ -11,12 +11,13 @@ import {
   updateBook,
   deleteBook,
 } from "../controllers/book.controller.js";
+import limiter from "../utils/limiter.js";
 
 const router = express.Router();
 
 router.get("/", getAllBooks);
 router.get("/:id", getBookById);
-router.post("/", validate(createBookSchema), createBook);
+router.post("/", limiter, validate(createBookSchema), createBook);
 router.patch("/:id", validate(updateBookSchema), updateBook);
 router.delete("/:id", deleteBook);
 

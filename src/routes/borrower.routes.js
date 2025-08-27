@@ -11,12 +11,13 @@ import {
   updateBorrower,
   deleteBorrower,
 } from "../controllers/borrower.controller.js";
+import limiter from "../utils/limiter.js";
 
 const router = express.Router();
 
 router.get("/", getAllBorrowers);
 router.get("/:id", getBorrowerById);
-router.post("/", validate(createBorrowerSchema), createBorrower);
+router.post("/", limiter, validate(createBorrowerSchema), createBorrower);
 router.patch("/:id", validate(updateBorrowerSchema), updateBorrower);
 router.delete("/:id", deleteBorrower);
 
