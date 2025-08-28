@@ -1,12 +1,18 @@
 import swaggerJsdoc from "swagger-jsdoc";
 
+/**
+ * Swagger configuration options for the Library Management API.
+ *
+ * This configuration object sets up the OpenAPI documentation,
+ * including endpoint definitions, reusable schemas, and server information. It is used by swagger-jsdoc
+ * to generate the Swagger specification for API documentation and UI.
+ */
 const options = {
   definition: {
     openapi: "3.0.3",
     info: {
       title: "Library Management API",
       version: "1.0.0",
-      description: "API documentation for the Library Management System",
     },
     servers: [
       {
@@ -54,7 +60,6 @@ const options = {
       },
     },
     paths: {
-      // 📚 Book routes
       "/books": {
         get: {
           summary: "Get all books (paginated)",
@@ -189,8 +194,6 @@ const options = {
           },
         },
       },
-
-      // 👤 Borrower routes
       "/borrowers": {
         get: {
           summary: "Get all borrowers (paginated)",
@@ -301,8 +304,6 @@ const options = {
           },
         },
       },
-
-      // 📊 Borrowing routes
       "/borrowings/overdue": {
         get: {
           summary: "Get overdue books",

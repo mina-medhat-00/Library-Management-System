@@ -15,7 +15,6 @@
     "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all"
   },
   "dependencies": {
-    "@faker-js/faker": "^9.9.0",
     "csv-writer": "^1.6.0",
     "dotenv": "^17.2.1",
     "express": "^4.21.2",
@@ -28,6 +27,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "nodemon": "^3.1.10",
     "sequelize-cli": "^6.6.3"
   }

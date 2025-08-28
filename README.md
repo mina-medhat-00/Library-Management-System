@@ -20,7 +20,7 @@ Built with **Node.js, Express, Sequelize ORM, and Swagger** for API documentatio
 
 ## Tech Stack
 
-- **Backend**: Node.js v22.11, Express  v4.21
+- **Backend**: Node.js v22.11, Express v4.21
 - **Database**: Sequelize ORM, Sequelize CLI
 - **Validation**: Joi
 - **Docs**: Swagger UI
@@ -98,13 +98,14 @@ Server should run on `http://localhost:3000`
 
 ## Available Scripts
 
-| Script             | Description                            |
-| ------------------ | -------------------------------------- |
-| `npm start`        | Start server in production mode        |
-| `npm run dev`      | Start server with Nodemon (hot reload) |
-| `npm run db:seed`  | Seed database with sample data         |
-| `npm run db:undo`  | Remove sample data                     |
-| `npm run db:reset` | Undo changes in sample data            |
+| Script               | Description                            |
+| -------------------- | -------------------------------------- |
+| `npm start`          | Start server in production mode        |
+| `npm run dev`        | Start server with Nodemon (hot reload) |
+| `npm run db:migrate` | Run database table creation migrations |
+| `npm run db:seed`    | Seed database with sample data         |
+| `npm run db:undo`    | Remove sample data                     |
+| `npm run db:reset`   | Undo changes in sample data            |
 
 ---
 
