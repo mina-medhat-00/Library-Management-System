@@ -46,7 +46,7 @@ sequelize
   .then(() => {
     console.log("Database synchronized successfully");
     server = app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Server running on localhost:${PORT}`);
     });
   })
   .catch((error) => {
