@@ -6,6 +6,8 @@ import swaggerJsdoc from "swagger-jsdoc";
  * This configuration object sets up the OpenAPI documentation,
  * including endpoint definitions, reusable schemas, and server information. It is used by swagger-jsdoc
  * to generate the Swagger specification for API documentation and UI.
+ *
+ * visit /api-docs for testing
  */
 const options = {
   definition: {
@@ -16,7 +18,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000/api/v1",
+        url: `http://localhost:${process.env.PORT}/api/v1`,
         description: "Local server",
       },
     ],

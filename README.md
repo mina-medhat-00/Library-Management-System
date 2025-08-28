@@ -45,6 +45,12 @@ src/
 
 ---
 
+## Schema
+
+![alt text](./assets/schema.png)
+
+---
+
 ## Getting Started
 
 ### Clone the repo
@@ -92,7 +98,7 @@ npm run dev
 npm start
 ```
 
-Server should run on `http://localhost:3000`
+Server should run on `http://localhost:port`
 
 ---
 
@@ -112,7 +118,8 @@ Server should run on `http://localhost:3000`
 ## API Documentation
 
 Swagger UI available at:
-`http://localhost:5000/api-docs`
+
+`http://localhost:port/api-docs`
 
 ---
 
@@ -146,7 +153,7 @@ Swagger UI available at:
 
 Test endpoints using:
 
-- Swagger UI (`http://localhost:3000/api-docs`)
+- Swagger UI (`http://localhost:port/api-docs`)
 - Postman
 
 ---
